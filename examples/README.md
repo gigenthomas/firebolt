@@ -32,3 +32,8 @@ This uses one source and two nodes:
 
 If any errors occur during parsing, those records and the associated error are sent to the kafka topic 'logs-errors' via the
 **errorkafkaproducer** built-in node.
+
+
+curl -X GET -k -u $User:$Password "http://localhost:9200/_cluster/health/?pretty"
+
+docker exec -it kafka   --create --topic __consumer_offsets --bootstrap-server localhost:9092 --partitions 50 --replication-factor 1

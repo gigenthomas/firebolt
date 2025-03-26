@@ -28,6 +28,8 @@ nodes:
             buffersize: 100
             params:
               elastic-addr: http://localhost:9200
+              elastic-username: elastic
+              elastic-password: IrvsUxo1UWcUYAXhWqTV
               batch-size: 10
               index-workers: 1
             error_handler:

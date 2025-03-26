@@ -2,11 +2,12 @@ version: '3'
 
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: zookeeper:latest
     ports:
       - "2181:2181"
+
   kafka:
-    image: wurstmeister/kafka:2.12-2.4.0
+    image: apache/kafka:latest
     ports:
       - "9092:9092"
     environment:
@@ -14,13 +15,33 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_NUM_PARTITIONS: 1
       KAFKA_CREATE_TOPICS: "ktk-source:1:1,ktk-dest:1:1,ktk-errors:1:1"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_NODE_ID: "1"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_LOG_DIRS: "/var/lib/kafka/data"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_AUTO_OFFSET_RESET: "earliest"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    image: elasticsearch:8.17.3
     container_name: elasticsearch
     environment:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
+      xpack.security.http.ssl.enabled: false
     ports:
       - "9200:9200"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+

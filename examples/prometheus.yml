@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s  # Set the scrape interval to every 15 seconds
+  evaluation_interval: 15s  # Evaluate rules every 15 seconds
+
+scrape_configs:
+  - job_name: 'logging'
+    static_configs:
+      - targets: ['localhost:9877']  # Scraping from the KafkaToKafka app's metrics port
+    metrics_path: '/metrics'  # Path for scraping metrics
+    scheme: 'http'  # Assuming the metrics are exposed over HTTP
+
+  - job_name: 'kafka'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['localhost:9092']  # Adjust if using a different Kafka metrics exporter
+
+  - job_name: 'elasticsearch'
+    metrics_path: '/_prometheus/metrics'
+    static_configs:
+      - targets: ['localhost:9200']
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

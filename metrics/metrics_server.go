@@ -17,7 +17,7 @@ type Server struct {
 
 // StartServer starts the MetricsServer using the passed context to handle shutdown
 func StartServer(ctx context.Context, port int) error {
-	log.Info("starting prometheus http server")
+	log.Info("starting prometheus http server on port ", port)
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.Handler())
 

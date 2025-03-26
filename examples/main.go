@@ -14,6 +14,7 @@ import (
 	"github.com/digitalocean/firebolt/node"
 	"github.com/digitalocean/firebolt/node/elasticsearch"
 	"github.com/digitalocean/firebolt/testutil"
+	log "github.com/sirupsen/logrus"
 )
 
 // choose an example to run; see 'runKafkaToKafka()' or 'runLogging()' for the actual example code
@@ -29,6 +30,8 @@ func main() {
 		shared.ProduceTestData("ktk-source", 10)
 		shared.ConsumeTestData("ktk-dest", 10)
 	} else if exampleName == "logging" {
+		log.Info("running logging example")
+
 		runLogging()
 
 		shared.ProduceTestData("logs-raw", 120)
